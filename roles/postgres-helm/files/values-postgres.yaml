@@ -1,0 +1,11 @@
+global:
+  storageClass: local-path
+auth:
+  existingSecret: postgres-secret
+  username: myuser
+  database: mydb
+primary:
+  persistence:
+    enabled: true
+    size: 10Gi
+

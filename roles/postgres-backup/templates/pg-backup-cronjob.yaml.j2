@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: pg-backup
+  namespace: database
+spec:
+  schedule: "0 2 * * *"   # 02:00 UTC daily
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: pg-dump
+              image: bitnami/postgresql:16
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-secret
+                      key: password
+              command: ["bash","-c"]
+              args:
+                - |
+                  pg_dump -h postgres-postgresql -U myuser mydb > /backups/pg_$(date +%F).sql
+          restartPolicy: OnFailure
+          volumes:
+            - name: backups
+              persistentVolumeClaim:
+                claimName: pg-backup-pvc
+

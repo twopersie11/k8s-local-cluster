@@ -1,0 +1,20 @@
+---
+- copy:
+    src: values-postgres.yaml
+    dest: /tmp/values-postgres.yaml
+
+- name: Create secret
+  shell: |
+    kubectl -n database create secret generic postgres-secret \
+      --from-literal=password="{{ vault_postgres_password }}" \
+      --dry-run=client -o yaml | kubectl apply -f -
+  changed_when: false
+
+- name: Deploy Postgres
+  shell: |
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    helm repo update
+    helm upgrade --install postgres bitnami/postgresql \
+      --namespace database --create-namespace \
+      -f /tmp/values-postgres.yaml
+

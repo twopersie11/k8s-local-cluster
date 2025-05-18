@@ -1,0 +1,13 @@
+global:
+  storageClass: local-path
+auth:
+  existingSecret: redis-secret
+master:
+  persistence:
+    enabled: true
+    size: 5Gi
+replica:
+  persistence:
+    enabled: true
+    size: 5Gi
+

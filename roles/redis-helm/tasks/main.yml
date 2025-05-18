@@ -1,0 +1,19 @@
+---
+- copy:
+    src: values-redis.yaml
+    dest: /tmp/values-redis.yaml
+
+- name: Secret
+  shell: |
+    kubectl -n cache create secret generic redis-secret \
+      --from-literal=password="{{ vault_redis_password }}" \
+      --dry-run=client -o yaml | kubectl apply -f -
+  changed_when: false
+
+- name: Deploy Redis
+  shell: |
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    helm upgrade --install redis bitnami/redis \
+      --namespace cache --create-namespace \
+      -f /tmp/values-redis.yaml
+

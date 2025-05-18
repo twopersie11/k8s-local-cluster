@@ -1,0 +1,9 @@
+---
+- name: Deploy backup CronJob
+  template:
+    src: pg-backup-cronjob.yaml.j2
+    dest: /tmp/pg-backup-cronjob.yaml
+
+- name: Apply CronJob
+  shell: kubectl apply -f /tmp/pg-backup-cronjob.yaml
+

@@ -1,0 +1,11 @@
+---
+- name: Download Helm
+  become: yes
+  unarchive:
+    src: https://get.helm.sh/helm-v3.15.0-linux-amd64.tar.gz
+    dest: /usr/local/bin
+    remote_src: yes
+    extra_opts: [--strip-components=1]
+  args:
+    creates: /usr/local/bin/helm
+

@@ -1,0 +1,36 @@
+---
+# installs containerd + k3s (master or worker)
+- name: Install prerequisites
+  become: yes
+  apt:
+    name:
+      - curl
+      - ca-certificates
+      - gnupg
+      - lsb-release
+    update_cache: yes
+
+- name: Install containerd
+  become: yes
+  apt:
+    name: containerd
+    state: present
+
+- name: Install k3s (master)
+  when: "'masters' in group_names"
+  become: yes
+  shell: |
+    curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--write-kubeconfig-mode 644 --cluster-init" \
+      K3S_TOKEN={{ k3s_cluster_token }} sh -
+  args:
+    creates: /usr/local/bin/k3s
+
+- name: Install k3s (worker)
+  when: "'workers' in group_names"
+  become: yes
+  shell: |
+    curl -sfL https://get.k3s.io | K3S_URL=https://{{ groups['masters'][0] }}:6443 \
+      K3S_TOKEN={{ k3s_cluster_token }} sh -
+  args:
+    creates: /usr/local/bin/k3s
+
