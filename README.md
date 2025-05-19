@@ -1,4 +1,7 @@
 
+
+
+
 ## 💡 Solution Idea
 
 This project delivers a fully-Ansible-driven, k3s-based Kubernetes lab environment, with PostgreSQL and Redis managed by Helm and daily backups—all reproducible on fresh Ubuntu VMs.  
@@ -34,4 +37,7 @@ This project delivers a fully-Ansible-driven, k3s-based Kubernetes lab environme
    - Clear README with step-by-step instructions means anyone can bring up the entire environment on new Ubuntu VMs with a single command.
 
 By following this structure, the solution meets all Business & Product Requirements, and provides a clean, modular foundation for future enhancements—TLS, S3 backups, CI/CD integration, and more.  
+
+
+
 
